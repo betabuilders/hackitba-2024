@@ -161,3 +161,8 @@ cython_debug/
 
 # DB_DATA
 db_data/
+
+# archivos de mac y temporales de vim
+*.DS_Store
+*.swp
+*.swo
