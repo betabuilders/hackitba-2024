@@ -1,6 +1,7 @@
 import { CATEGORIES } from "@/lib/constants";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
+import CategoryBadge from "./category-badge";
 
 export type Expense = {
     name: string,
@@ -20,7 +21,7 @@ export default function ExpenseGrid(props: {expenses: Expense[] }) {
                     AR$ {info.amount}
                 </CardDescription>
                 <div className="flex flex-row gap-2">
-                  { ...info.categories.map((e, k) => <Badge className={CATEGORIES[e].style} key={k}>{CATEGORIES[e].name}</Badge> ) }
+                  { ...info.categories.map((e, k) => <CategoryBadge category={e}/> ) }
                 </div>
               </CardHeader>
               <CardContent>

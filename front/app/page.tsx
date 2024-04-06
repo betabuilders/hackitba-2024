@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 
 import { CATEGORIES } from "@/lib/constants";
 import ExpenseGrid, { Expense } from "@/components/expense-grid";
+import CategoryBadge from "@/components/category-badge";
 
 const EXPENSES = [
   {
@@ -31,12 +32,12 @@ const EXPENSES = [
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-start p-4 lg:p-24 pt-6 gap-8">
+    <main className="flex min-h-screen flex-col items-center justify-start p-4 my-8 lg:p-24 pt-6 gap-8">
       <Card className="w-full h-full p-4">
         <div className="flex flex-col text-left self-start gap-2">
           <p>Filtros</p>
           <div className="flex flex-wrap justify-start gap-2 lg:gap-4 w-full [&>*]:text-black">
-            { ...Object.values(CATEGORIES).map((_,i) => <Badge className={_.style} key={i}>{_.name}</Badge> ) }
+            { ...Object.keys(CATEGORIES).map((_,i) => <CategoryBadge category={_}/> ) }
           </div>
         </div>
       </Card>
