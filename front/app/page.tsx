@@ -1,57 +1,73 @@
-import Image from "next/image";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+"use client";
 
-import { CATEGORIES } from "@/lib/constants";
-import ExpenseGrid, { Expense } from "@/components/expense-grid";
-import CategoryBadge from "@/components/category-badge";
+import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
 
-const EXPENSES = [
-  {
-    id: "bb5a5768-5d91-4c6c-8014-aa44a56be733",
-    name: "Saldo 1",
-    amount: "234.00",
-    description:
-      "Descripcion de gasto iria aca, junto con mas informacion que no puedo pensar ahora",
-      categories: ["DECOR", "INFRA"]
-  },
-  {
-	id: "7b9f077f-6db2-449c-8068-6096c3ec4eff",
-    name: "Saldo 2",
-    amount: "5007.32",
-    description: "Una computadora cara",
-    categories: ["TOOLS"]
-  },
-  {
-	id: "197d50ff-f30c-4e11-b317-ed2cf0c76432",
-    name: "Saldo 3",
-    amount: "234.87",
-    description:
-      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Culpa accusamus inventore expedita iusto nihil. Animi culpa dolor qui. Aut adipisci facilis odit",
-    categories: ["DECOR"]
-  },
-] as Expense[];
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod"
 
-export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-start p-4 my-8 lg:p-24 pt-6 gap-8">
-      <h1 className="text-2xl lg:text-5xl font-bold">Pagar</h1>
-      <Card className="w-full h-full p-4">
-        <div className="flex flex-col text-left self-start gap-2">
-          <p>Filtros</p>
-          <div className="flex flex-wrap justify-start gap-2 lg:gap-4 w-full [&>*]:text-black">
-            { ...Object.keys(CATEGORIES).map((_,i) => <CategoryBadge category={_}/> ) }
-          </div>
-        </div>
-      </Card>
-      
-      <ExpenseGrid expenses={EXPENSES} role="USER"></ExpenseGrid>
-    </main>
-  );
+function onSubmit(data) {
+    console.log(data);
+    // @todo make a request to the server, get access and redirect
+    window.location = new URL('./expenses', window.origin).href;
+}
+
+export default function LoginPage(){
+    const formSchema = z.object({
+        email: z.string().email({
+          message: "Porfavor ingrese un email correcto",
+        }),
+        password: z.string().min(4, {
+            message: "Porfavor utilice una contraseña de 4+ caracteres"
+        })
+    })
+
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            email: "",
+            password: "",
+        },
+    });
+    
+    return <div className="flex flex-col justify-center items-center w-full h-[100vh] p-8">
+        <main className="flex flex-col justify-center items-center lg:w-1/3 w-full p-4 lg:p-16 h-fit border rounded gap">
+            <p>Login</p>
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                    <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Email</FormLabel>
+                            <FormControl>
+                                <Input placeholder="beta-builders@gmail.com" type="email" {...field} />
+                            </FormControl>
+                            <FormDescription>Ingrese su correo electronico.</FormDescription>
+                            <FormMessage/>
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="password"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Password</FormLabel>
+                            <FormControl>
+                                <Input placeholder="* * *" type="password" {...field} />
+                            </FormControl>
+                            <FormDescription>Elija una contraseña segura.</FormDescription>
+                            <FormMessage/>
+                            </FormItem>
+                        )}
+                    />
+                    <Button type="submit">Submit</Button>
+                </form>
+            </Form>
+        </main>
+    </div>
 }
