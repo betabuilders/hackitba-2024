@@ -65,7 +65,7 @@ export default function LoginPage(){
                             </FormItem>
                         )}
                     />
-                    <Button type="submit" className="w-full">Submit</Button>
+                    <Button type="submit" className="w-full dark:bg-blue-300">Submit</Button>
                 </form>
             </Form>
         </main>
