@@ -54,7 +54,7 @@ export default function PayExpense({ params } : { params: { expense: string }} )
                                 <FormLabel className="text-sm font-light uppercase">
                                     Transferí a una cuenta</FormLabel>
                                 <FormControl>
-                                    <Input className="" placeholder="Ingresá el CBU, CVU o alias" type="email" {...field} />
+                                    <Input className="" placeholder="Ingresá el CBU, CVU o alias" type="text" {...field} />
                                 </FormControl>
                                 {/* <FormDescription>Cuenta a la que transferir dinero</FormDescription> */}
                                 <FormMessage/>
