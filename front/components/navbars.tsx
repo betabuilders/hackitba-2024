@@ -36,7 +36,7 @@ export function MobileNavBar({
 				<HamburgerMenuIcon/>
 			</Button>
 		</SheetTrigger>
-		<SheetContent side={"left"}>
+		<SheetContent side={"left"} className="dark:backdrop-blur">
 			<ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
 				{LINKS.map((link) => 
 					<a href={link.href} key={link.name}>

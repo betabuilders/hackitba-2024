@@ -15,7 +15,7 @@ export default function ExpenseGrid(props: {expenses: Expense[] }) {
           return (
             <Card key={i} className="w-full h-full">
               <CardHeader>
-                <CardTitle>{info.name}</CardTitle>
+                <CardTitle >{info.name}</CardTitle>
                 <CardDescription className="flex flex-col gap-2">
                     AR$ {info.amount}
                 </CardDescription>
