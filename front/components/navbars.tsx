@@ -58,7 +58,7 @@ export function DesktopNavBar({
 	
 	return (
 		<nav className="hidden lg:block">
-		<div className="flex h-16 w-full items-center justify-between bg-blue-300 text-center font-bold px-24">
+		<div className="flex h-16 w-full items-center justify-between bg-primary text-center font-bold px-24">
 			<p>Beta builders</p>
 			<div className="flex flex-row justify-end gap-4 font-semibold">
 				{...LINKS.map((l) => {

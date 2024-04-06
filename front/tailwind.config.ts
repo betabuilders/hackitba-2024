@@ -84,6 +84,7 @@ const config = {
     "bg-green-400",
     "text-black",
     "text-white",
+    "dark",
     {
       pattern: /bg-(red|green|blue|purple)-(100|200|300|400)/,
       variants: [
