@@ -79,8 +79,8 @@ class Transaction(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     # No se puede borrar nada de una transacción, solo se puede rechazar
     member = models.ForeignKey('Member', related_name='transactions', on_delete=models.PROTECT)
-    expense = models.ForeignKey('Expense', related_name='transactions', on_delete=models.PROTECT)
-    supplier = models.ForeignKey('Supplier', related_name='transactions', on_delete=models.PROTECT)
+    expense = models.ForeignKey('Expense', related_name='transactions', on_delete=models.PROTECT, blank=True, null=True)
+    supplier = models.ForeignKey('Supplier', related_name='transactions', on_delete=models.PROTECT, blank=True, null=True)
     organization = models.ForeignKey('Organization', related_name='transactions', on_delete=models.CASCADE)
     amount_in_cents = models.IntegerField(default=0) # Monto de la transacción en centavos
     balance_in_cents = models.IntegerField(default=0) # Balance de la cuenta después de la transacción
@@ -89,7 +89,7 @@ class Transaction(models.Model):
 
 
     def __str__(self):
-        return self.name
+        return str(self.get_balance()) + ' - ' + self.description
 
     def get_amount(self):
         return self.amount_in_cents / 100
@@ -105,12 +105,15 @@ class AssignedFunds(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     member = models.ForeignKey('Member', related_name='assigned_funds', on_delete=models.PROTECT) # miembro que asigna el fondo (jefe)
-    expense = models.ForeignKey('Expense', related_name='assigned_funds',on_delete=models.PROTECT) # a qué expensa se asigna el fondo
+    expense = models.ForeignKey('Expense', related_name='assigned_funds',on_delete=models.PROTECT, blank=True, null=True)
+     # a qué expensa se asigna el fondo
+    organization = models.ForeignKey('Organization', related_name='assignedFunds', on_delete=models.CASCADE)
     amount_in_cents = models.IntegerField(default=0) # Monto de la transacción en centavos
     balance_in_cents = models.IntegerField(default=0) # Balance de la cuenta después de la transacción
+    expense_balance_in_cents = models.IntegerField(default=0) # el balance de la expensa a la que pertenece la asignación
 
     def __str__(self):
-        return self.expense + ' - ' + self.get_amount()
+        return self.organization.name + ' - ' + str(self.get_amount())
     
     def get_amount(self):
         return self.amount_in_cents / 100
