@@ -14,14 +14,22 @@ import CategoryBadge from "@/components/category-badge";
 
 const EXPENSES = [
   {
+    id: "bb5a5768-5d91-4c6c-8014-aa44a56be733",
     name: "Saldo 1",
     amount: "234.00",
     description:
       "Descripcion de gasto iria aca, junto con mas informacion que no puedo pensar ahora",
       categories: ["DECOR", "INFRA"]
   },
-  { name: "Saldo 2", amount: "5007.32", description: "Una computadora cara", categories: ["TOOLS"] },
   {
+	id: "7b9f077f-6db2-449c-8068-6096c3ec4eff",
+    name: "Saldo 2",
+    amount: "5007.32",
+    description: "Una computadora cara",
+    categories: ["TOOLS"]
+  },
+  {
+	id: "197d50ff-f30c-4e11-b317-ed2cf0c76432",
     name: "Saldo 3",
     amount: "234.87",
     description:
@@ -33,6 +41,7 @@ const EXPENSES = [
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-start p-4 my-8 lg:p-24 pt-6 gap-8">
+      <h1 className="text-2xl lg:text-5xl font-bold">Pagar</h1>
       <Card className="w-full h-full p-4">
         <div className="flex flex-col text-left self-start gap-2">
           <p>Filtros</p>
@@ -42,7 +51,7 @@ export default function Home() {
         </div>
       </Card>
       
-      <ExpenseGrid expenses={EXPENSES}></ExpenseGrid>
+      <ExpenseGrid expenses={EXPENSES} role="USER"></ExpenseGrid>
     </main>
   );
 }

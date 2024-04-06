@@ -76,12 +76,6 @@ const config = {
   },
   plugins: [require("tailwindcss-animate")],
   safelist: [
-    "bg-red-200",
-    "bg-red-400",
-    "bg-purple-200",
-    "bg-purple-400",
-    "bg-green-200",
-    "bg-green-400",
     "text-black",
     "text-white",
     "dark",
