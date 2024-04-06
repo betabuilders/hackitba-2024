@@ -64,6 +64,9 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
+    class Meta:
+        verbose_name_plural = "Categories"
+    
 class Transaction(models.Model):
 
     STATES = (
@@ -81,7 +84,9 @@ class Transaction(models.Model):
     organization = models.ForeignKey('Organization', related_name='transactions', on_delete=models.CASCADE)
     amount_in_cents = models.IntegerField(default=0) # Monto de la transacción en centavos
     balance_in_cents = models.IntegerField(default=0) # Balance de la cuenta después de la transacción
+    invoice = models.FileField(upload_to='invoices/', blank=True, null=True)
     state = models.CharField(max_length=1, choices=STATES, default='A')
+
 
     def __str__(self):
         return self.name
