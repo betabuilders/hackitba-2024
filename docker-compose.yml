@@ -1,0 +1,79 @@
+version: "3"
+
+services:
+  # Django
+  django:
+    container_name: django_hackitba
+    build:
+      context: ./back
+    command: python manage.py runserver 0.0.0.0:8000
+    restart: always
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./back:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgres://dev:root@db:5432/hacktiba-db
+    networks:
+      - hackitba-network
+
+  # nextjs Frontend
+  nextjs:
+    container_name: nextjs_hackitba
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    restart: always
+    stdin_open: true
+    tty: true
+    command: npm run dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./front:/app
+      - /app/node_modules
+    networks:
+      - hackitba-network
+
+  # PostgreSQL Database
+  db:
+    container_name: db_hackitba
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: hackitba-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+    networks:
+      - hackitba-network
+
+  # pgAdmin
+  pgadmin:
+    container_name: pgadmin_hackitba
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@hacktiba.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    logging:
+      driver: none
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    networks:
+      - hackitba-network
+
+networks:
+  hackitba-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
