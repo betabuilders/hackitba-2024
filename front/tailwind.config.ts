@@ -80,7 +80,7 @@ const config = {
     "text-white",
     "dark",
     {
-      pattern: /bg-(red|green|blue|purple|teal)-(100|200|300|400)/,
+      pattern: /bg-(red|green|blue|purple|teal|yellow)-(100|200|300|400)/,
       variants: [
         'dark'
       ]
