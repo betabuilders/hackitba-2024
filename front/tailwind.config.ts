@@ -75,6 +75,12 @@ const config = {
     },
   },
   plugins: [require("tailwindcss-animate")],
+  safelist: [
+    "bg-red-200",
+    "bg-purple-200",
+    "bg-green-200",
+    "text-black"
+  ]
 } satisfies Config;
 
 export default config;

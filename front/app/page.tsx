@@ -9,7 +9,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 import { CATEGORIES } from "@/lib/constants";
-import ExpenseGrid from "@/components/expense-grid";
+import ExpenseGrid, { Expense } from "@/components/expense-grid";
 
 const EXPENSES = [
   {
@@ -27,7 +27,7 @@ const EXPENSES = [
       "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Culpa accusamus inventore expedita iusto nihil. Animi culpa dolor qui. Aut adipisci facilis odit",
     categories: ["DECOR"]
   },
-];
+] as Expense[];
 
 export default function Home() {
   return (

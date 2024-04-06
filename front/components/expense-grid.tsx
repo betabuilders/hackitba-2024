@@ -6,7 +6,7 @@ export type Expense = {
     name: string,
     amount: string,
     description: string,
-    categories: string[],
+    categories: (keyof typeof CATEGORIES)[],
 }
 
 export default function ExpenseGrid(props: {expenses: Expense[] }) {
@@ -17,11 +17,11 @@ export default function ExpenseGrid(props: {expenses: Expense[] }) {
               <CardHeader>
                 <CardTitle>{info.name}</CardTitle>
                 <CardDescription className="flex flex-col gap-2">
-                  <p>AR$ {info.amount}</p>
-                  <div className="flex flex-row gap-2">
-                    { ...info.categories.map((e, i) => <Badge className={CATEGORIES[e].style} key={i + info.name}>{CATEGORIES[e].name}</Badge> ) }
-                  </div>
+                    AR$ {info.amount}
                 </CardDescription>
+                <div className="flex flex-row gap-2">
+                  { ...info.categories.map((e, k) => <Badge className={CATEGORIES[e].style} key={k}>{CATEGORIES[e].name}</Badge> ) }
+                </div>
               </CardHeader>
               <CardContent>
                 <p>{info.description}</p>
