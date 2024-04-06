@@ -59,7 +59,7 @@ export function DesktopNavBar({
 	return (
 		<nav className="hidden z-50 lg:block">
 			<div className="fixed top-0 flex h-0 lg:h-16 w-full items-center justify-between bg-primary z-50 text-center font-bold px-24">
-				<p>Beta builders</p>
+				<p>Hola Juan!</p>
 				<div className="flex flex-row justify-end gap-4 font-semibold">
 					{...LINKS.map((l) => {
 						return <div key={l.name} className={cn("py-1 px-2 rounded-sm border bg-white/40 border-blue-200", pathname == l.href ? "font-normal text-gray-500" : "")}>

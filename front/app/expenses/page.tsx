@@ -19,7 +19,7 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-start p-4 my-8 lg:p-24 pt-6 gap-8">
-      <h1 className="text-2xl lg:text-5xl font-bold">Pagar</h1>
+      <h1 className="text-2xl lg:text-5xl font-bold">Presupuestos disponibles</h1>
       <Card className="w-full h-full p-4">
         <div className="flex flex-col text-left self-start gap-2">
           <p>Filtros</p>

@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/
 import { Badge } from "./ui/badge";
 import CategoryBadge from "./category-badge";
 import { Plus } from "lucide-react";
+import { Avatar } from "./ui/avatar";
 
 export default function ExpenseGrid(props: { expenses: Expense[], role: string, filter: string[] }) {
 	console.log(props.filter);
@@ -11,9 +12,14 @@ export default function ExpenseGrid(props: { expenses: Expense[], role: string, 
 		  <a href={props.role == 'ADMIN' ? `./expenses/${info.id}` : `./pay/${info.id}/`} className="w-full h-full">
 			  <Card key={i} className="w-full h-full">
 				  <CardHeader>
-				  <CardTitle >{info.name}</CardTitle>
+				  <CardTitle>AR$ {info.amount}</CardTitle>
+				  <div className="flex -space-x-1 overflow-hidden">
+						{info.people.map((url, i) => <Avatar key={i} className="inline-block h-6 w-6 rounded-full">
+							<img key={i} src={`./avatars/${url}.jpeg`}/>
+						</Avatar>)}
+					</div>
 				  <CardDescription className="flex flex-col gap-2">
-					  AR$ {info.amount}
+					{info.name}
 				  </CardDescription>
 				  <div className="flex flex-row gap-2">
 					  { ...info.categories.map((e, k) => <CategoryBadge key={k} category={e}/> ) }
