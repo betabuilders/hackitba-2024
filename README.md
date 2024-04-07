@@ -22,18 +22,25 @@ git clone https://github.com/betabuilders/hackitba-2024.git
 cd hackitba-2024
 ```
 
-Luego, se debe descargar y descomprimir los datos de la base de datos desde [Google Drive](https://drive.google.com/file/d/1yira8OS-koOvfw0gOew8VdLxFVRIVaaQ/view?usp=share_link)
+Se debe descargar y descomprimir los datos de la base de datos desde [Google Drive](https://drive.google.com/file/d/1yira8OS-koOvfw0gOew8VdLxFVRIVaaQ/view?usp=share_link)
 
-Se construye el contenedor con el siguiente comando
+Y reemplazar el valor de la variable `URL_API`, en el archivo `front/lib/constants.ts` por el resultado de correr el siguiente comando con el cual obtendra el valor del IP de su computador
+
+```sh
+ipconfig getifaddr en0
+```
+
+Una vez que reemplazo `http://localhost:3000` por `http://su.valor.de.ip:3000` usted podra construir el contenedor con el siguiente comando
+
 ```sh
 docker-compose build
 ```
 
-Luego, se ejecuta la imagen que crea los servidores, y se comunica con los puertos necesarios
+Y luego se ejecuta la imagen que crea los servidores, y se comunica con los puertos necesarios
 ```sh
 docker-compose up
 ```
 
-Al correr estos comandos en su terminal, luego podra ingresar a `http://localhost:3000` para acceder a la pagina web del servicio.
+Al correr estos comandos en su terminal, luego podra ingresar al puerto `3000` de su IP para acceder a la pagina web del servicio.
 
 > Nota: Si usted o su computadora estuviera utilizando este puerto, puede que la URL resulte diferente. Asegurese de no tener puertos ocupados o procesos que pudieran interrumpir con la conexion
