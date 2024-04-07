@@ -8,6 +8,7 @@ class Member(models.Model):
     organization = models.ForeignKey('Organization', related_name='members', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    avatar = models.CharField(max_length=100, default='avatar-default.jpg')
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
