@@ -11,33 +11,38 @@ import { z } from "zod";
 
 import { ArrowDownIcon } from "@radix-ui/react-icons";
 import AvatarCascade from "@/components/avatar-cascade";
+import { MouseEvent, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { isNumberKey } from "@/lib/utils";
 
 const formSchema = z.object({
-    cbu: z.string().min(4, {
-        message: "Porfavor ingrese un numero de CBU correcto"
+    amount: z.coerce.number().min(0, {
+        message: "Porfavor ingrese un monto valido"
     })
 });
 
 function onSubmit(data: z.infer<typeof formSchema>, expense?: Expense) {
     console.log(data);
     // @todo make a request to the server, get access and redirect
-    const url = new URL(`./pay/${expense?.id}/amount`,window.location.origin);
-    url.searchParams.set('cbu', data.cbu);
+    const url = new URL(`./pay/${expense?.id}/description`,window.location.origin);
+    url.searchParams.set('amount', data.amount.toString());
     new URL(window.location.href).searchParams.forEach((v, k) => url.searchParams.set(k,v));
     window.location = url.href;
 }
 
-export default function PayExpense({ params } : { params: { expense: string }} ) {
+export default function PaymentDescription({ params } : { params: { expense: string, cbu: string }} ) {
+    const ALIAS = useSearchParams().get('cbu');
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            cbu: "",
+            amount: undefined,
         },
     });
 
     const expenseData = EXPENSES.find((e) => e.id == params.expense);
 
-    return <>
+    return <div className="flex flex-col justify-center items-center h-fit">
         <div className="text-center">
             <h2 className="text-sm opacity-50 text-center mb-2 font-mono">
                 Origen
@@ -48,21 +53,29 @@ export default function PayExpense({ params } : { params: { expense: string }} )
             </h1>
         </div>
         <AvatarCascade imageSources={expenseData?.people.map((url) => `/avatars/${url}.jpeg`)} className="h-16 w-16 rounded-full ring-2 ring-neutral-200 dark:ring-neutral-700 -ring-offset-2"/>
-        <div className="flex flex-col items-center gap-2 w-full">
+        <div className="flex flex-col items-center gap-2 w-full h-full">
             <ArrowDownIcon className="w-8 h-8 text-blue-400 dark:text-blue-200"/>
-            <h2 className="text-sm opacity-50 text-center mb-2 font-mono">
-                Destino</h2>
+            <h2 className="text-sm opacity-50 text-center mb-2 font-mono uppercase">{ALIAS}</h2>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit((e) => onSubmit(e, expenseData))} className="space-y-8 w-full">
+                <form onSubmit={form.handleSubmit((data) => onSubmit(data, expenseData))} className="space-y-8 w-full h-full">
                     <FormField
                         control={form.control}
-                        name="cbu"
+                        name="amount"
                         render={({ field }) => (
                             <FormItem>
-                            <FormLabel className="text-sm font-light uppercase">
-                                Transferí a una cuenta</FormLabel>
+                            <FormLabel className="text-sm font-light uppercase">Ingrese el monto a transferir</FormLabel>
                             <FormControl>
-                                <Input className="uppercase" placeholder="Ingresá el CBU, CVU o alias" type="text" {...field} />
+                                <div className="flex flex-row items-center align-middle h-full">
+                                    <p>$</p> <Input 
+                                    className="font-ultrabold text-3xl lg:text-5xl !border-0 !outline-0 !ring-0 !shadow-none !ring-offset-0 h-fit"
+                                    onKeyPress={(event) => (!isNumberKey(event) && event.preventDefault()) }
+                                    placeholder="0.00"
+                                    type="number"
+                                    inputMode="numeric"
+                                    pattern="\d+"
+                                    {...field}
+                                />
+                                </div>
                             </FormControl>
                             {/* <FormDescription>Cuenta a la que transferir dinero</FormDescription> */}
                             <FormMessage/>
@@ -73,5 +86,5 @@ export default function PayExpense({ params } : { params: { expense: string }} )
                 </form>
             </Form>
         </div>
-    </>
+    </div>
 }

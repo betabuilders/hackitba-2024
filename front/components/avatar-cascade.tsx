@@ -2,16 +2,18 @@ import { cn } from "@/lib/utils";
 import { Avatar } from "./ui/avatar";
 
 export default function AvatarCascade({ imageSources, className } : { imageSources: string[], className?: string }) {
+    if (imageSources == undefined || imageSources.length == 0 ) return <></> 
     const over = Math.max(imageSources.length - 4, 0);
+
     if (over == 0) {
-        return <div className={"flex -space-x-2 overflow-hidden p-1"}>
+        return <div className={"flex -space-x-2 overflow-hidden h-min p-1"}>
             {imageSources.map((url, i) => <Avatar key={i} className="inline-block h-10 w-10 rounded-full">
                 <img key={i} src={url}/>
             </Avatar>)}
         </div>
     }
 
-    return  (<div className={"flex -space-x-2 overflow-hidden p-1"}>
+    return  (<div className={"flex -space-x-2 overflow-y-visible h-min p-1"}>
         {
             [imageSources[0], over, ...imageSources.slice(imageSources.length - over + 1)].map((url, i) => {
                 if (typeof url == 'string')
