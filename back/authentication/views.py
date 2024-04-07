@@ -40,6 +40,7 @@ def login(request):
         user_dict['id'] = member['id']
         user_dict['role'] = member['role']
         user_dict['organization'] = member['organization']
+        user_dict['avatar'] = member['avatar']
 
     if user and user.check_password(password):
         return JsonResponse({'message': 'Login successful', 'member':

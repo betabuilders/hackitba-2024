@@ -94,7 +94,7 @@ def createPayment(member, expense, amount, supplier, description='', invoice='')
         generateTransaction(member, expense, amount, supplier, description, invoice, status='R') # transacción guardada como no exitosa
         return JsonResponse({'message': 'Error: Payment failed but registred'}, status=400)
     
-    assignFund(member, - amount, expense) # resto el dinero de la cuenta corriente de la expensa
+    assignFund(member, amount, expense) # resto el dinero de la cuenta corriente de la expensa
     generateTransaction(member, expense, amount, supplier, description, invoice, status='A') # guardo la transacción ya que se realizó con éxito
     return JsonResponse({'message': 'Payment created successfully'}, status=201)
 
