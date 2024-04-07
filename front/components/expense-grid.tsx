@@ -101,7 +101,7 @@ export default function ExpenseGrid(props: { expenses: Expense[], role: string, 
 
     return <div className="grid-cols grid auto-rows-min grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 items-start justify-start gap-4 w-full">
 		{
-			<AdditionDialog className={ filteredExpenses.length == 0 ? "col-span-full h-36" : "" }/>
+			props.role == "ADMIN" ? <AdditionDialog className={ filteredExpenses.length == 0 ? "col-span-full h-36" : "" }/> : null
 		}
 		{
 			...(filteredExpenses.length == 0 ? [<Card className="p-4 col-span-full">

@@ -14,14 +14,14 @@ import ExpenseGrid from "@/components/expense-grid";
 import CategoryBadge from "@/components/category-badge";
 import { useState } from "react";
 
-const ROLE = "ADMIN";
+const ROLE = "USER";
 
 export default function Home() {
   const [filters, setFilters] = useState(Object.keys(CATEGORIES).reduce((prev, curr) => (prev[curr] = false, prev), {} as {[key: string]: boolean}));
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-start p-4 my-8 lg:p-24 pt-10 gap-8">
-      <h1 className="text-2xl lg:text-5xl font-bold">{ ROLE == 'ADMIN' ? "Presupuestos existentes" : "Presupuestos disponibles"}</h1>
+      <h1 className="text-2xl lg:text-5xl font-bold">{ ROLE == 'ADMIN' ? "Presupuestos existentes" : "Presupuestos Disponibles"}</h1>
       <Card className="w-full h-full p-4">
         <div className="flex flex-col text-left self-start gap-2">
           <p>Filtros</p>
