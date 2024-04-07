@@ -44,3 +44,8 @@ docker-compose up
 Al correr estos comandos en su terminal, luego podra ingresar al puerto `3000` de su IP para acceder a la pagina web del servicio.
 
 > Nota: Si usted o su computadora estuviera utilizando este puerto, puede que la URL resulte diferente. Asegurese de no tener puertos ocupados o procesos que pudieran interrumpir con la conexion
+
+
+Por defecto podra utilizar las siguientes credenciales para acceder
+Admin:
+- tpietravallo@itba.edu.ar, root
