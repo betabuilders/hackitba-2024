@@ -15,7 +15,7 @@ import { MouseEvent, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Card, CardTitle } from "@/components/ui/card";
 import { CameraIcon } from "lucide-react";
-import { getExpense } from "@/actions/action";
+import { createPayment, getExpense, getID } from "@/actions/action";
 
 export default function PaymentDescription({ params } : { params: { expense: string, cbu: string }} ) {
     const ALIAS = useSearchParams().get('cbu');
@@ -26,6 +26,9 @@ export default function PaymentDescription({ params } : { params: { expense: str
 
     useEffect(() => {
         getExpense(params.expense).then(data => setExpenseData(data));
+        getID().then(id => {
+            console.log({id, expense: params.expense, amount: -Number(AMOUNT), cbu: ALIAS, description: DESCRIPTION});
+            createPayment(Number(id), params.expense, -Number(AMOUNT), ALIAS, DESCRIPTION)});
     }, []);
 
     return <>

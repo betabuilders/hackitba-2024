@@ -154,7 +154,8 @@ export function DataTable<TData extends Payment, TValue>({
 function AdditionDialog() {
 	return <Dialog>
 		<DialogTrigger asChild>
-			<Card className="mt-2 p-2 flex justify-center flex-row"><Plus/></Card>
+			<Card className="mt-2 p-2 flex justify-center flex-row cursor-pointer hover:scale-[102%] transition-transform duration-300 ease-in-out"
+      ><Plus/></Card>
 		</DialogTrigger>
 		<DialogContent className="sm:max-w-[425px]">
 		<DialogHeader>

@@ -13,7 +13,7 @@ import { LINKS } from "@/lib/constants";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Avatar } from "./ui/avatar";
-import { isAdmin } from "@/actions/action";
+import { getAvatar, getNames, isAdmin } from "@/actions/action";
 
 export function MobileNavBar({
   children,
@@ -54,16 +54,20 @@ export function DesktopNavBar({
 }: { children?: ReactNode } & { [key: string]: any }) {
 	const pathname = usePathname();
 	const [admin, setRole] = useState(false);
+	const [avatar, setAvatar] = useState("");
+	const [name, setName] = useState("");
 
 	useEffect(() => {
 		isAdmin().then(v => setRole(v));
+		getAvatar().then(v => setAvatar(v));
+		getNames().then(v => setName(v));
 	}, []);
 
 	
 	return (
 		<nav className="hidden z-50 lg:block">
 			<div className="fixed top-0 flex h-0 lg:h-16 w-full items-center justify-between bg-primary/10 z-50 text-center font-bold px-24">
-				<p>Hola Juan!</p>
+				<p>Bienvenido, {name}!</p>
 				<div className="flex flex-row justify-end items-center gap-4 font-semibold">
 					{...LINKS.filter(f => !(f.admin == true && admin == false)).map((l) => {
 						return <div key={l.name} className={cn("py-1 px-2 rounded-sm border bg-white/20 border-blue-200 h-fit", pathname == l.href ? "font-normal text-gray-800" : "")}>
@@ -71,7 +75,7 @@ export function DesktopNavBar({
 						</div>
 					})}
 					{
-						<Avatar><img src="/avatars/avatar-1.jpeg" key={'pfp'} /></Avatar>
+						<Avatar><img src={`/avatars/${avatar}`} key={'pfp'} /></Avatar>
 					}
 				</div>
 			</div>

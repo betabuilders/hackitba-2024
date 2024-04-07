@@ -14,7 +14,8 @@ import { cn } from "@/lib/utils";
 function AdditionDialog({ className } : { className: string }) {
 	return <Dialog>
 		<DialogTrigger asChild>
-			<Card className={cn("flex justify-center items-center w-full h-full", className)}><Plus className="size-16"></Plus></Card>
+			<Card className={cn("flex justify-center items-center w-full h-full cursor-pointer hover:scale-[102%] transition-transform duration-300 ease-in-out"
+			, className)}><Plus className="size-16"></Plus></Card>
 		</DialogTrigger>
 		<DialogContent className="sm:max-w-[425px]">
 		<DialogHeader>
@@ -23,48 +24,60 @@ function AdditionDialog({ className } : { className: string }) {
 			Make changes to your profile here. Click save when you're done.
 			</DialogDescription> */}
 		</DialogHeader>
-		<div className="grid gap-4 py-4">
-			<div className="grid grid-cols-4 items-center gap-4">
-			<Label htmlFor="name" className="text-right">
-				Nombre
-			</Label>
-			<Input
-				id="name"
-				defaultValue=""
-				className="col-span-3"
-			/>
+		<form action="">
+			<div className="grid gap-4 py-4">
+				<div className="grid grid-cols-4 items-center gap-4">
+				<Label htmlFor="name" className="text-right">
+					Titulo
+				</Label>
+				<Input
+					id="title"
+					defaultValue=""
+					className="col-span-3"
+				/>
+				</div>
+				<div className="grid grid-cols-4 items-center gap-4">
+				<Label htmlFor="name" className="text-right">
+					Descipción
+				</Label>
+				<Input
+					id="description"
+					defaultValue=""
+					className="col-span-3"
+				/>
+				</div>
+				<div className="grid grid-cols-4 items-center gap-4">
+				<Label htmlFor="categories" className="text-right">
+					Categorias
+				</Label>
+				<Input
+					id="categories"
+					defaultValue=""
+					className="col-span-3"
+				/>
+				</div>
+				<div className="grid grid-cols-4 items-center gap-4">
+				<Label htmlFor="amount" className="text-right">
+					Monto $
+				</Label>
+				<Input
+					id="amount"
+					defaultValue=""
+					className="col-span-3"
+				/>
+				</div>
+				<div className="grid grid-cols-4 items-center gap-4">
+				<Label htmlFor="people" className="text-right">
+					Personas
+				</Label>
+				<Input
+					id="people"
+					defaultValue=""
+					className="col-span-3"
+				/>
+				</div>
 			</div>
-			<div className="grid grid-cols-4 items-center gap-4">
-			<Label htmlFor="categories" className="text-right">
-				Categorias
-			</Label>
-			<Input
-				id="categories"
-				defaultValue=""
-				className="col-span-3"
-			/>
-			</div>
-			<div className="grid grid-cols-4 items-center gap-4">
-			<Label htmlFor="amount" className="text-right">
-				Monto $
-			</Label>
-			<Input
-				id="amount"
-				defaultValue=""
-				className="col-span-3"
-			/>
-			</div>
-			<div className="grid grid-cols-4 items-center gap-4">
-			<Label htmlFor="people" className="text-right">
-				Personas
-			</Label>
-			<Input
-				id="people"
-				defaultValue=""
-				className="col-span-3"
-			/>
-			</div>
-		</div>
+		</form>
 		<DialogFooter>
 			<Button type="submit">Crear</Button>
 		</DialogFooter>
@@ -72,10 +85,12 @@ function AdditionDialog({ className } : { className: string }) {
 	</Dialog>
 }
 
-export default function ExpenseGrid(props: { expenses: Expense[], role: string, filter: string[] }) {
+export default function ExpenseGrid(props: { expenses: Expense[], role: boolean, filter: string[] }) {
 	const filteredExpenses = props.expenses.filter(e => props.filter?.every((f) => e.categories.includes(f) ) ?? true ).map((info, i) => {
 		return (
-			<a rel="prefetch" key={i} href={props.role == 'ADMIN' ? `./expenses/${info.id}` : `./pay/${info.id}/`} className="w-full h-full">
+			<a rel="prefetch" key={i} 
+			{...(props.role ? {} : {href: `./pay/${info.id}/`})} 
+			className="w-full h-full">
 				<Card key={i} className="w-full h-full flex justify-between hover:scale-[101%] transition-transform duration-300 ease-in-out">
 					<div className="grid grid-cols-5 grid-rows-1 w-full">
 						<div className="col-span-3 w-full flex flex-col justify-between">
@@ -100,7 +115,8 @@ export default function ExpenseGrid(props: { expenses: Expense[], role: string, 
 
     return <div className="grid-cols grid auto-rows-min grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 items-start justify-start gap-4 w-full">
 		{
-			props.role == "ADMIN" ? <AdditionDialog className={ filteredExpenses.length == 0 ? "col-span-full h-36" : "" }/> : null
+			props.role ? <AdditionDialog className={ filteredExpenses.length == 0 ? "col-span-full h-36"
+			 : "" }/> : null
 		}
 		{
 			...(filteredExpenses.length == 0 ? [<Card className="p-4 col-span-full">
