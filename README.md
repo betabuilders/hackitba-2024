@@ -22,6 +22,8 @@ git clone https://github.com/betabuilders/hackitba-2024.git
 cd hackitba-2024
 ```
 
+Luego, se debe descargar y descomprimir los datos de la base de datos desde [Google Drive](https://drive.google.com/file/d/1yira8OS-koOvfw0gOew8VdLxFVRIVaaQ/view?usp=share_link)
+
 Se construye el contenedor con el siguiente comando
 ```sh
 docker-compose build
