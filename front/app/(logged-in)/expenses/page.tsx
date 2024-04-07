@@ -34,7 +34,7 @@ export default function Home() {
         </div>
       </Card>
       
-      <ExpenseGrid filter={Object.keys(filters).filter(k => filters[k])} expenses={EXPENSES} role="USER"></ExpenseGrid>
+      <ExpenseGrid filter={Object.keys(filters).filter(k => filters[k])} expenses={EXPENSES} role="ADMIN"></ExpenseGrid>
     </main>
   );
 }

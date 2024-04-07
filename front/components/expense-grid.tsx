@@ -5,6 +5,71 @@ import CategoryBadge, { CategoryContainer } from "./category-badge";
 import { Plus } from "lucide-react";
 import { Avatar } from "./ui/avatar";
 import AvatarCascade from "./avatar-cascade";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
+import { Button } from "./ui/button";
+import { Label } from "./ui/label";
+import { Input } from "./ui/input";
+
+function AdditionDialog() {
+	return <Dialog>
+		<DialogTrigger asChild>
+			<Card className="flex justify-center items-center w-full h-full"><Plus className="size-16"></Plus></Card>
+		</DialogTrigger>
+		<DialogContent className="sm:max-w-[425px]">
+		<DialogHeader>
+			<DialogTitle>Añadir un nuevo presupuesto</DialogTitle>
+			{/* <DialogDescription>
+			Make changes to your profile here. Click save when you're done.
+			</DialogDescription> */}
+		</DialogHeader>
+		<div className="grid gap-4 py-4">
+			<div className="grid grid-cols-4 items-center gap-4">
+			<Label htmlFor="name" className="text-right">
+				Nombre
+			</Label>
+			<Input
+				id="name"
+				defaultValue=""
+				className="col-span-3"
+			/>
+			</div>
+			<div className="grid grid-cols-4 items-center gap-4">
+			<Label htmlFor="categories" className="text-right">
+				Categorias
+			</Label>
+			<Input
+				id="categories"
+				defaultValue=""
+				className="col-span-3"
+			/>
+			</div>
+			<div className="grid grid-cols-4 items-center gap-4">
+			<Label htmlFor="cuit" className="text-right">
+				CUIT
+			</Label>
+			<Input
+				id="cuit"
+				defaultValue=""
+				className="col-span-3"
+			/>
+			</div>
+			<div className="grid grid-cols-4 items-center gap-4">
+			<Label htmlFor="cbu" className="text-right">
+				CBU
+			</Label>
+			<Input
+				id="cbu"
+				defaultValue=""
+				className="col-span-3"
+			/>
+			</div>
+		</div>
+		<DialogFooter>
+			<Button type="submit">Crear</Button>
+		</DialogFooter>
+		</DialogContent>
+	</Dialog>
+}
 
 export default function ExpenseGrid(props: { expenses: Expense[], role: string, filter: string[] }) {
 	console.log(props.filter);
@@ -34,20 +99,15 @@ export default function ExpenseGrid(props: { expenses: Expense[], role: string, 
 	});
 
     return <div className="grid-cols grid auto-rows-min grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 items-start justify-start gap-4 w-full">
-        {
+		{
+			<AdditionDialog/>
+		}
+		{
 			...(filteredExpenses.length == 0 ? [<Card className="p-4 col-span-full">
 				<p className="text-xl">No se encontro un saldo perteneciente a las categorias:</p>
 				{/* @ts-ignore */}
 				<div className="inline-flex w-full gap-4">{ <CategoryContainer categories={props.filter}/> }</div>
 			</Card>] : filteredExpenses)
-		}
-		
-		{
-			props.role === 'ADMIN' ?
-			<Card className="flex justify-center items-center w-full h-full">
-				<Plus className="size-16"></Plus>
-			</Card>
-			: null
 		}
       </div>
 }
