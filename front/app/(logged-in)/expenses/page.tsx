@@ -15,6 +15,7 @@ import CategoryBadge from "@/components/category-badge";
 import { use, useState, useEffect } from "react";
 
 import { getExpenses } from "@/actions/action"; 
+import { cn } from "@/lib/utils";
 
 const ROLE = "USER";
 
