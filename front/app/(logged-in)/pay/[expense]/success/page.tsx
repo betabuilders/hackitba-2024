@@ -26,7 +26,7 @@ export default function PaymentDescription({ params } : { params: { expense: str
     return <>
         <div className="rounded border border-green-600 w-fit p-8 flex flex-col items-center justify-center">
             <div className="text-center">
-                <h1 className="text-2xl lg:text-3xl font-mono">Operacion <span className="text-green-200 dark:text-green-400">exitosa</span></h1>
+                <h1 className="text-2xl lg:text-3xl font-mono">Operacion <span className="text-green-600 dark:text-green-400">exitosa</span></h1>
                 <hr className="my-4"/>
                 <h1 className="text-2xl lg:text-4xl uppercase">{expenseData?.name}</h1>
                 <h1 className="text-xl opacity-50 text-center mb-2">

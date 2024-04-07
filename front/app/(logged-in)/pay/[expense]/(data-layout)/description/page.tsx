@@ -85,14 +85,14 @@ export default function PaymentDescription({ params } : { params: { expense: str
                     <FormItem>
                     <FormLabel className="text-sm font-light uppercase">Brevemente describa la operacion</FormLabel>
                     <FormControl>
-                        <Input className="" placeholder="Descripcion" type="text" {...field} />
+                        <Input className="" placeholder="Descripcion (al menos cuatro caracteres)" type="text" {...field} />
                     </FormControl>
                     {/* <FormDescription>Cuenta a la que transferir dinero</FormDescription> */}
                     <FormMessage/>
                     </FormItem>
                 )}
             />
-            <Button type="submit" onClick={(e) => createGreenBubble(e)} className="w-full bg-blue-200 uppercase tracking-widest font-extrabold" disabled={((form.watch().description?.length || 0) < DESCRIPTION_CHAR_LIMIT)}>Pagar</Button>
+            <Button type="submit" onClick={(e) => createGreenBubble(e)} className="w-full dark:bg-blue-200 bg-blue-400 uppercase tracking-widest font-extrabold" disabled={((form.watch().description?.length || 0) < DESCRIPTION_CHAR_LIMIT)}>Pagar</Button>
             <a href={`./pay/${expenseData?.id}/amount`} rel="prefetch" className="sr-only"></a>
         </form>
     </Form>

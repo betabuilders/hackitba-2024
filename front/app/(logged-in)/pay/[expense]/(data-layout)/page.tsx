@@ -55,7 +55,7 @@ export default function PayExpense({ params } : { params: { expense: string }} )
                         </FormItem>
                     )}
                 />
-                <Button type="submit" className="w-full bg-blue-200">Continuar</Button>
+                <Button type="submit" className="w-full bg-blue-400 dark:bg-blue-200 ">Continuar</Button>
                 <a href={`./pay/${expenseData?.id}/amount`} rel="prefetch" className="sr-only"></a>
             </form>
         </Form>
