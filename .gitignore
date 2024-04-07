@@ -160,7 +160,7 @@ cython_debug/
 #.idea/
 
 # DB_DATA
-#db_data/
+db_data/
 
 # archivos de mac y temporales de vim
 *.DS_Store
