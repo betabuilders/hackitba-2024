@@ -10,26 +10,26 @@ export default function ExpenseGrid(props: { expenses: Expense[], role: string, 
 	console.log(props.filter);
 	const filteredExpenses = props.expenses.filter(e => props.filter?.every((f) => e.categories.includes(f) ) ?? true ).map((info, i) => {
 		return (
-		  <a key={i} href={props.role == 'ADMIN' ? `./expenses/${info.id}` : `./pay/${info.id}/`} className="w-full h-full">
-			  <Card key={i} className="w-full h-full flex justify-between hover:scale-[101%] transition-transform duration-300 ease-in-out">
-				<div className="grid grid-cols-5 grid-rows-1 w-full">
-					<div className="col-span-3 w-full flex flex-col justify-between">
-						<CardHeader className="w-full">
-							<CardTitle>{info.name}</CardTitle>
-							<div className="flex flex-row gap-2 w-[140%]">
-								{ <CategoryContainer className="flex-wrap" categories={info.categories}/> }
-							</div>
-						</CardHeader>
-						<CardContent className="flex">
-							<AvatarCascade imageSources={info.people.map((i) => `/avatars/${i}.jpeg`)}/>
-						</CardContent>
+			<a rel="prefetch" key={i} href={props.role == 'ADMIN' ? `./expenses/${info.id}` : `./pay/${info.id}/`} className="w-full h-full">
+				<Card key={i} className="w-full h-full flex justify-between hover:scale-[101%] transition-transform duration-300 ease-in-out">
+					<div className="grid grid-cols-5 grid-rows-1 w-full">
+						<div className="col-span-3 w-full flex flex-col justify-between">
+							<CardHeader className="w-full">
+								<CardTitle>{info.name}</CardTitle>
+								<div className="flex flex-row gap-2 w-[140%]">
+									{ <CategoryContainer className="flex-wrap" categories={info.categories}/> }
+								</div>
+							</CardHeader>
+							<CardContent className="flex">
+								<AvatarCascade imageSources={info.people.map((i) => `/avatars/${i}.jpeg`)}/>
+							</CardContent>
+						</div>
+						<div className="col-span-2 flex justify-end items-center pr-2 mr-2">
+							<p className="font-bold text-2xl">$ {info.amount.split(',').map((t, i) => <span key={i} className={i == 0 ? "text-2xl" : "text-sm align-top"}>{t}</span> )}</p>
+						</div>
 					</div>
-					<div className="col-span-2 flex justify-end items-center pr-2 mr-2">
-						<p className="font-bold text-2xl">$ {info.amount.split(',').map((t, i) => <span key={i} className={i == 0 ? "text-2xl" : "text-sm align-top"}>{t}</span> )}</p>
-					</div>
-				</div>
-			  </Card>
-		  </a>
+				</Card>
+			</a>
 		);
 	});
 

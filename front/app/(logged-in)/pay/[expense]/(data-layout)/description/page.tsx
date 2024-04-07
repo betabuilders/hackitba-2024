@@ -29,7 +29,7 @@ function onSubmit(data: z.infer<typeof formSchema>, expense?: Expense) {
         const url = new URL(`./pay/${expense?.id}/success`,window.location.origin);
         url.searchParams.set('description', data.description);
         new URL(window.location.href).searchParams.forEach((v, k) => url.searchParams.set(k,v));
-        document.querySelector("#green-bubble")?.remove();
+        setTimeout(() => document.querySelector("#green-bubble")?.remove(), 100);
         window.location = url.href;
     }, 1200);
 }
@@ -76,39 +76,24 @@ export default function PaymentDescription({ params } : { params: { expense: str
 
     const expenseData = EXPENSES.find((e) => e.id == params.expense);
 
-    return <>
-        <div className="text-center">
-            <h2 className="text-sm opacity-50 text-center mb-2 font-mono">
-                Origen
-            </h2>
-            <h1 className="text-2xl lg:text-4xl uppercase">{expenseData?.name }</h1>
-            <h1 className="text-xl opacity-50 text-center mb-2">
-                Disponible: $ { expenseData?.amount }
-            </h1>
-        </div>
-        <AvatarCascade imageSources={expenseData?.people.map((url) => `/avatars/${url}.jpeg`)} className="h-16 w-16 rounded-full ring-2 ring-neutral-200 dark:ring-neutral-700 -ring-offset-2"/>
-        <div className="flex flex-col items-center gap-2 w-full">
-            <ArrowDownIcon className="w-8 h-8 text-blue-400 dark:text-blue-200"/>
-            <h2 className="text-sm opacity-50 text-center mb-2 font-mono uppercase">{ALIAS}</h2>
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit((data) => onSubmit(data, expenseData))} className="space-y-8 w-full">
-                    <FormField
-                        control={form.control}
-                        name="description"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel className="text-sm font-light uppercase">Brevemente describa la operacion</FormLabel>
-                            <FormControl>
-                                <Input className="" placeholder="Descripcion" type="text" {...field} />
-                            </FormControl>
-                            {/* <FormDescription>Cuenta a la que transferir dinero</FormDescription> */}
-                            <FormMessage/>
-                            </FormItem>
-                        )}
-                    />
-                    <Button type="submit" onClick={(e) => createGreenBubble(e)} className="w-full bg-blue-200 uppercase tracking-widest font-extrabold" disabled={((form.watch().description?.length || 0) < DESCRIPTION_CHAR_LIMIT)}>Pagar</Button>
-                </form>
-            </Form>
-        </div>
-    </>
+    return <Form {...form}>
+        <form onSubmit={form.handleSubmit((data) => onSubmit(data, expenseData))} className="space-y-8 w-full">
+            <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel className="text-sm font-light uppercase">Brevemente describa la operacion</FormLabel>
+                    <FormControl>
+                        <Input className="" placeholder="Descripcion" type="text" {...field} />
+                    </FormControl>
+                    {/* <FormDescription>Cuenta a la que transferir dinero</FormDescription> */}
+                    <FormMessage/>
+                    </FormItem>
+                )}
+            />
+            <Button type="submit" onClick={(e) => createGreenBubble(e)} className="w-full bg-blue-200 uppercase tracking-widest font-extrabold" disabled={((form.watch().description?.length || 0) < DESCRIPTION_CHAR_LIMIT)}>Pagar</Button>
+            <a href={`./pay/${expenseData?.id}/amount`} rel="prefetch" className="sr-only"></a>
+        </form>
+    </Form>
 }
