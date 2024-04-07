@@ -13,9 +13,7 @@ const fetching = async (data) => {
         },
         body: new URLSearchParams(data),
     });
-    console.log(response.status);
     const content = await response.json();
-    console.log(content);
     return content;
 
 }
@@ -28,7 +26,13 @@ export async function login(data) {
     }
     const cookieStore = cookies();
     cookieStore.set('organization', response.member.organization);
+    cookieStore.set('role', response.member.role);
     return true;
+}
+
+export async function isAdmin() {
+    const cookieStore = cookies();
+    return cookieStore.get('role')?.value == 'admin';
 }
 
 export async function getExpenses() {
@@ -38,12 +42,12 @@ export async function getExpenses() {
     return response;
 }
 
-export async function getExpense(id) {
+export async function getExpense(id: string) {
     const response = await fetch(`${URL_API}/api/expenses/${id}`).then(res => res.json());
     return response.data as Expense;
 }
 
-export async function accountInfo(cbu){
-    const response = await fetch(`${URL_API}/bank/account_info`).then(res => res.json());
+export async function accountInfo(cbu: string | number){
+    const response = await fetch(`${URL_API}/bank/account_info?cbu=${cbu}`).then(res => res.json());
     return response as Account;
 }

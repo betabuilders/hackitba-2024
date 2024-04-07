@@ -10,6 +10,8 @@ import { z } from "zod";
 
 import { useSearchParams } from "next/navigation";
 import { isNumberKey } from "@/lib/utils";
+import { useEffect, useState } from "react";
+import { getExpense } from "@/actions/action";
 
 const formSchema = z.object({
     amount: z.coerce.number().min(0, {
@@ -18,7 +20,6 @@ const formSchema = z.object({
 });
 
 function onSubmit(data: z.infer<typeof formSchema>, expense?: Expense) {
-    console.log(data);
     // @todo make a request to the server, get access and redirect
     const url = new URL(`./pay/${expense?.id}/description`,window.location.origin);
     url.searchParams.set('amount', data.amount.toString());
@@ -26,7 +27,7 @@ function onSubmit(data: z.infer<typeof formSchema>, expense?: Expense) {
     window.location = url.href;
 }
 
-export default function PaymentDescription({ params } : { params: { expense: string, cbu: string }} ) {
+export default function PaymentAmount({ params } : { params: { expense: string, cbu: string }} ) {
     const ALIAS = useSearchParams().get('cbu');
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -36,7 +37,11 @@ export default function PaymentDescription({ params } : { params: { expense: str
         },
     });
 
-    const expenseData = EXPENSES.find((e) => e.id == params.expense);
+    const [expenseData, setExpenseData] = useState<Expense>();
+
+    useEffect(() => {
+        getExpense(params.expense).then(data => setExpenseData(data));
+    }, []);
 
     return <Form {...form}>
         <form onSubmit={form.handleSubmit((data) => onSubmit(data, expenseData))} className="space-y-8 w-full h-full">

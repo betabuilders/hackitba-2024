@@ -11,7 +11,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
 
 async function onSubmit(data) {
-    console.log(data);
     // @todo make a request to the server, get access and redirect
     const response = await login(data);
     if (!response) {

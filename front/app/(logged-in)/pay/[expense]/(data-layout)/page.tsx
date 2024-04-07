@@ -11,6 +11,8 @@ import { z } from "zod";
 
 import { ArrowDownIcon } from "@radix-ui/react-icons";
 import AvatarCascade from "@/components/avatar-cascade";
+import { useEffect, useState } from "react";
+import { getExpense } from "@/actions/action";
 
 const formSchema = z.object({
     cbu: z.string().min(4, {
@@ -19,7 +21,6 @@ const formSchema = z.object({
 });
 
 function onSubmit(data: z.infer<typeof formSchema>, expense?: Expense) {
-    console.log(data);
     // @todo make a request to the server, get access and redirect
     const url = new URL(`./pay/${expense?.id}/amount`,window.location.origin);
     url.searchParams.set('cbu', data.cbu);
@@ -35,7 +36,11 @@ export default function PayExpense({ params } : { params: { expense: string }} )
         },
     });
 
-    const expenseData = EXPENSES.find((e) => e.id == params.expense);
+    const [expenseData, setExpenseData] = useState<Expense>();
+
+    useEffect(() => {
+        getExpense(params.expense).then(data => setExpenseData(data));
+    }, []);
 
     return <div>
         <Form {...form}>

@@ -38,7 +38,7 @@ export type Account = {
     alias: string,
 }
 
-export const URL_API = "http://localhost:8000";
+export const URL_API = "http://10.7.16.62:8000";
 
 export const CATEGORIES = {
     "DECOR": { name: "Decoracion", style: "bg-red-200 dark:bg-red-400 text-black"},

@@ -22,14 +22,9 @@ const ROLE = "USER";
 export default function Home() {
   const [expenses, setExpenses] = useState([]);
   const [filters, setFilters] = useState(Object.keys(CATEGORIES).reduce((prev, curr) => (prev[curr] = false, prev), {} as { [key: string]: boolean }));
-
   
-  const get_expenses = async () => {
-    await getExpenses().then(res => setExpenses(res.data));
-  }
-
   useEffect(() => {
-    get_expenses();
+    getExpenses().then(res => setExpenses(res.data));
   }, []);
 
 

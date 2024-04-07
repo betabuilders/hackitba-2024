@@ -9,5 +9,5 @@ export default function CategoryBadge({ category, disabled, className, ...props 
 }
 
 export function CategoryContainer({ categories, className } : { categories: (keyof typeof CATEGORIES)[], className?: string }) {
-    return <div className={cn("inline-flex w-full gap-x-4 gap-y-2", className)}>{ categories.map((f, i) => <CategoryBadge key={i} category={f}/>) }</div>
+    return <div className={cn("inline-flex w-full gap-x-4 gap-y-2", className)}>{ categories.map((f, i) => <CategoryBadge key={i} category={f.name}/>) }</div>
 }

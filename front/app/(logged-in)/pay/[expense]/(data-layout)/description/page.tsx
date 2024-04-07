@@ -11,8 +11,9 @@ import { z } from "zod";
 
 import { ArrowDownIcon } from "@radix-ui/react-icons";
 import AvatarCascade from "@/components/avatar-cascade";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { getExpense } from "@/actions/action";
 
 const DESCRIPTION_CHAR_LIMIT = 4;
 
@@ -23,7 +24,6 @@ const formSchema = z.object({
 });
 
 function onSubmit(data: z.infer<typeof formSchema>, expense?: Expense) {
-    console.log(data);
     // @todo make a request to the server, get access and redirect
     setTimeout(() => {
         const url = new URL(`./pay/${expense?.id}/success`,window.location.origin);
@@ -74,7 +74,11 @@ export default function PaymentDescription({ params } : { params: { expense: str
         },
     });
 
-    const expenseData = EXPENSES.find((e) => e.id == params.expense);
+    const [expenseData, setExpenseData] = useState<Expense>();
+
+    useEffect(() => {
+        getExpense(params.expense).then(data => setExpenseData(data));
+    }, []);
 
     return <Form {...form}>
         <form onSubmit={form.handleSubmit((data) => onSubmit(data, expenseData))} className="space-y-8 w-full">

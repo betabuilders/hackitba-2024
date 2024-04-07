@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import Link from "next/link";
 
 import { Sheet, SheetTrigger, SheetContent, SheetClose } from "./ui/sheet";
@@ -13,12 +13,18 @@ import { LINKS } from "@/lib/constants";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Avatar } from "./ui/avatar";
+import { isAdmin } from "@/actions/action";
 
 export function MobileNavBar({
   children,
   ...props
 }: { children?: ReactNode } & { [key: string]: any }) {
 	const pathname = usePathname();
+	const [admin, setRole] = useState(false);
+
+	useEffect(() => {
+		isAdmin().then(v => setRole(v));
+	}, []);
 
 	return <Sheet>
 		<SheetTrigger asChild>
@@ -30,7 +36,7 @@ export function MobileNavBar({
 		</SheetTrigger>
 		<SheetContent side={"left"} className="dark:backdrop-blur">
 			<ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
-				{LINKS.map((link) => 
+				{LINKS.filter(f => f.admin == true && admin == false).map((link) => 
 					<a rel="prefetch" href={link.href} key={link.name}>
 						<SheetClose className="block">
 							<p className={`text-xl pb-4 font-medium ${pathname == link.href ? "opacity-50 pointer-events-none" : ""}`}>{link.name}</p>
@@ -47,13 +53,19 @@ export function DesktopNavBar({
   ...props
 }: { children?: ReactNode } & { [key: string]: any }) {
 	const pathname = usePathname();
+	const [admin, setRole] = useState(false);
+
+	useEffect(() => {
+		isAdmin().then(v => setRole(v));
+	}, []);
+
 	
 	return (
 		<nav className="hidden z-50 lg:block">
 			<div className="fixed top-0 flex h-0 lg:h-16 w-full items-center justify-between bg-primary/10 z-50 text-center font-bold px-24">
 				<p>Hola Juan!</p>
 				<div className="flex flex-row justify-end items-center gap-4 font-semibold">
-					{...LINKS.map((l) => {
+					{...LINKS.filter(f => !(f.admin == true && admin == false)).map((l) => {
 						return <div key={l.name} className={cn("py-1 px-2 rounded-sm border bg-white/20 border-blue-200 h-fit", pathname == l.href ? "font-normal text-gray-800" : "")}>
 							<a rel="prefetch" href={l.href}>{l.name}</a>
 						</div>

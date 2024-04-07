@@ -73,8 +73,6 @@ function AdditionDialog({ className } : { className: string }) {
 }
 
 export default function ExpenseGrid(props: { expenses: Expense[], role: string, filter: string[] }) {
-	console.log(props.filter);
-	console.log(">>>>>",props.expenses);
 	const filteredExpenses = props.expenses.filter(e => props.filter?.every((f) => e.categories.includes(f) ) ?? true ).map((info, i) => {
 		return (
 			<a rel="prefetch" key={i} href={props.role == 'ADMIN' ? `./expenses/${info.id}` : `./pay/${info.id}/`} className="w-full h-full">
@@ -88,7 +86,7 @@ export default function ExpenseGrid(props: { expenses: Expense[], role: string, 
 								</div>
 							</CardHeader>
 							<CardContent className="flex">
-								<AvatarCascade imageSources={info.members.map((i) => `/avatars/${i}.jpeg`)}/>
+								<AvatarCascade imageSources={info.members.map((i) => `/avatars/${i.avatar}`)}/>
 							</CardContent>
 						</div>
 						<div className="col-span-2 flex justify-end items-center pr-2 mr-2">

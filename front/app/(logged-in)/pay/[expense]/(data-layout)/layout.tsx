@@ -1,17 +1,24 @@
 "use client";
 
+import { accountInfo, getExpense, getExpenses } from "@/actions/action";
 import AvatarCascade from "@/components/avatar-cascade";
-import { EXPENSES } from "@/lib/constants";
+import { EXPENSES, Expense } from "@/lib/constants";
 import { ArrowDownIcon } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { ReactNode, useEffect, useRef } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 
 
 export default function PaymentFlowLayout({ children, params } : { params: { expense: string, }, children: ReactNode, }) {
     const ref = useRef(null as unknown as HTMLDivElement);
     const ALIAS = useSearchParams().get('cbu');
     const AMOUNT = useSearchParams().get('amount');
-    const expenseData = EXPENSES.find((e) => e.id.toString() == params.expense);
+
+    const [expenseData, setExpenseData] = useState<Expense>();
+
+    useEffect(() => {
+        getExpense(params.expense).then(data => setExpenseData(data));
+    }, []);
+    
 
     return <div className="flex flex-col justify-center items-center w-full h-fit">
     <div className="text-center">
