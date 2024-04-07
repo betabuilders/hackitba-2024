@@ -13,6 +13,7 @@ import { CATEGORIES, EXPENSES } from "@/lib/constants";
 import ExpenseGrid from "@/components/expense-grid";
 import CategoryBadge from "@/components/category-badge";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 const ROLE = "USER";
 
@@ -26,7 +27,7 @@ export default function Home() {
         <div className="flex flex-col text-left self-start gap-2">
           <p>Filtros</p>
           <div className="flex flex-wrap justify-start gap-2 lg:gap-4 w-full [&>*]:text-black">
-            { ...Object.keys(CATEGORIES).map((_,i) => <CategoryBadge key={i} category={_} className="cursor-pointer" onClick={
+            { ...Object.keys(CATEGORIES).map((_,i) => <CategoryBadge key={i} category={_} className={cn("cursor-pointer", filters[_] ? "opacity-50" : "opacity-100 hover:scale-[102%]" )} onClick={
               filters[_] ? 
               () => { setFilters(fil => { fil[_] = false; return { ...fil }; }); }
               : () => { setFilters(fil => { fil[_] = true; return { ...fil }; }); }

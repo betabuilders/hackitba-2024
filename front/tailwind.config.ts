@@ -78,6 +78,7 @@ const config = {
   safelist: [
     "text-black",
     "text-white",
+    "hover:scale-[102%]",
     "dark",
     {
       pattern: /bg-(red|green|blue|purple|teal|yellow)-(100|200|300|400)/,
