@@ -13,6 +13,8 @@ import { ArrowDownIcon } from "@radix-ui/react-icons";
 import AvatarCascade from "@/components/avatar-cascade";
 import { MouseEvent, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { Card, CardTitle } from "@/components/ui/card";
+import { CameraIcon } from "lucide-react";
 
 export default function PaymentDescription({ params } : { params: { expense: string, cbu: string }} ) {
     const ALIAS = useSearchParams().get('cbu');
@@ -39,6 +41,8 @@ export default function PaymentDescription({ params } : { params: { expense: str
             <hr className="w-full color-white p-2"/>
             <p className="font-light">{DESCRIPTION}</p>
         </div>
-
+        <Card className="flex flex-row p-2 opacity-50">
+            Cargar ticket <CameraIcon className="ml-3 size-5"/>
+        </Card>
     </>
 }
