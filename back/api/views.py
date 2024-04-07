@@ -76,6 +76,10 @@ def createPayment(member, expense, amount, supplier, description='', invoice='')
         return JsonResponse({'message': 'Amount debe ser negativo (sale de la cuenta, no ingresa)'}, status=400) 
     if getExpenseBalance(expense) + amount < 0:
         return JsonResponse({'message': 'Error: Insufficient funds'}, status=400)
+    
+    # verificar que el supplier tenga un cbu esté en alguna category de la expensa
+    if not supplier.categories.filter(id__in=expense.categories.all()).exists():
+        return JsonResponse({'message': 'Error: Supplier not allowed'}, status=400)
 
     # hace el request a la api de bancos para transferir x monto de bankAcount a supplier (cbu)
     # url = os.getenv('HACKITBA_HOST')
@@ -124,8 +128,8 @@ class OrganizationView(View):
             organization = get_object_or_404(Organization, id=id)
 
             organization_dict = model_to_dict(organization)
-            organization['availableBalance'] = getOrganizationBalance(organization)
-            organization['totalFunds'] = getTotalFunds(organization)
+            organization_dict['availableBalance'] = getOrganizationBalance(organization)
+            organization_dict['totalFunds'] = getTotalFunds(organization)
 
 
             return JsonResponse({'message': 'OK', 'data': organization_dict}, status=200)
@@ -413,33 +417,37 @@ class MemberView(View):
         return JsonResponse({'message': 'Member created successfully'}, status=201)
     
 class SupplierView(View):
-    class SupplierView(View):
-        def get(self, request, id=None):
-            if id is None:
-                return JsonResponse({'message': 'OK', 'data': 'Show all suppliers'}, status=200)
+    def get(self, request, id=None):
+        if id is None:
+            organization = request.GET.get('organization')
+            if organization is not None:
+                suppliers = Supplier.objects.filter(Q(organization=organization))
+                suppliers = list(suppliers.values())
+                return JsonResponse({'message': 'OK', 'data': suppliers}, status=200)
             else:
-                organization = request.GET.get('organization')
-                if organization is not None:
-                    return JsonResponse({'message': 'OK', 'data': f'Show all suppliers for organization with id: {organization}'}, status=200)
-                return JsonResponse({'message': 'OK', 'data': f'Show supplier with id: {id}'}, status=200)
-        
-        @csrf_exempt
-        def post(self, request):
-            info = request.POST.get('info')
-            return JsonResponse({'message': 'OK', 'data': 'Create a supplier', 'info': info}, status=200)
-        
-        @csrf_exempt
-        def put(self, request, id=None):
-            info = request.POST.get('info')
-            if id is None:
                 return JsonResponse({'message': 'Error: id is required'}, status=400)
-            return JsonResponse({'message': 'OK', 'data': f'Update supplier with id: {id}', 'info': info}, status=200)
-        
-        @csrf_exempt
-        def delete(self, request, id=None):
-            if id is None:
-                return JsonResponse({'message': 'Error: id is required'}, status=400)
-            return JsonResponse({'message': 'OK', 'data': f'Delete supplier with id: {id}'}, status=200)
+        else:
+            supplier = get_object_or_404(Supplier, id=id)
+            supplier = model_to_dict(supplier)
+            return JsonResponse({'message': 'OK', 'data': supplier}, status=200)
+    
+    @csrf_exempt
+    def post(self, request):
+        info = request.POST.get('info')
+        return JsonResponse({'message': 'OK', 'data': 'Create a supplier', 'info': info}, status=200)
+    
+    @csrf_exempt
+    def put(self, request, id=None):
+        info = request.POST.get('info')
+        if id is None:
+            return JsonResponse({'message': 'Error: id is required'}, status=400)
+        return JsonResponse({'message': 'OK', 'data': f'Update supplier with id: {id}', 'info': info}, status=200)
+    
+    @csrf_exempt
+    def delete(self, request, id=None):
+        if id is None:
+            return JsonResponse({'message': 'Error: id is required'}, status=400)
+        return JsonResponse({'message': 'OK', 'data': f'Delete supplier with id: {id}'}, status=200)
 
 class CategoryView(View):
     def get(self, request, id=None):
