@@ -71,7 +71,7 @@ def generateTransaction(member, expense, amount, supplier, description='', invoi
 def createPayment(member, expense, amount, supplier, description='', invoice=''):
     bankAccount = member.organization.bankAccount
 
-    if amount > 0:
+    if amount > 0 or getExpenseBalance(expense) + amount < 0:
         return False
 
     # hace el request a la api de bancos para transferir x monto de bankAcount a supplier (cbu)
@@ -503,11 +503,9 @@ class TransactionView(View):
             transaction = list(transaction.values())[0]
             return JsonResponse({'message': 'OK', 'data': transaction}, status=200)
 
+    # puede crear un pago o agregar fondos a la organización según el signo de amount
     @csrf_exempt
     def post(self, request):
-        
-        # TODO: que use addFund para agregar fondos a la organización en el caso de monto positivo
-
         member = request.POST.get('member')
         expense = request.POST.get('expense')
         amount = request.POST.get('amount')
@@ -540,14 +538,8 @@ class TransactionView(View):
         if invoice is None:
             invoice = ''
         
-        # si el monto es negativo, tengo que crear un pago
-
-
-
-        member = get_object_or_404(Member, id=member)
-        expense = get_object_or_404(Expense, id=expense)
-        supplier = get_object_or_404(Supplier, id=supplier)
-        amount = int(amount)
+        # si el monto es negativo, tengo que crear un pago TODO: ver description
+        createPayment(member, expense, amount, supplier, description, invoice)
 
         
     @csrf_exempt
