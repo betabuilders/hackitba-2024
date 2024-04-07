@@ -32,7 +32,13 @@ export type Suppliers = {
     cuit: string
 }
 
-export const URL_API = "http://localhost:8000/api";
+export type Account = {
+    name: string,
+    CBU: string,
+    alias: string,
+}
+
+export const URL_API = "http://localhost:8000";
 
 export const CATEGORIES = {
     "DECOR": { name: "Decoracion", style: "bg-red-200 dark:bg-red-400 text-black"},

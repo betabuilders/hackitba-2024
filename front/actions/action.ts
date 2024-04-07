@@ -1,11 +1,11 @@
 "use server";
 
-import { URL_API } from "@/lib/constants";
+import { Account, Expense, URL_API } from "@/lib/constants";
 import { cookies } from "next/headers";
 
 const fetching = async (data) => {
 
-    const response = await fetch(`http://10.2.64.18:8000/auth/login/`, {
+    const response = await fetch(`${URL_API}/auth/login/`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -34,9 +34,16 @@ export async function login(data) {
 export async function getExpenses() {
     const cookieStore = cookies();
     const organization = cookieStore.get('organization');
-    console.log(">>>>>" + organization?.value);
-    const response = await fetch(`http://10.2.64.18:8000/api/expenses?organization=${organization?.value}`).then(res => res.json());
-    console.log("++++++++++++++++++++++++++++++++++",response);
+    const response = await fetch(`${URL_API}/api/expenses?organization=${organization?.value}`).then(res => res.json());
     return response;
 }
 
+export async function getExpense(id) {
+    const response = await fetch(`${URL_API}/api/expenses/${id}`).then(res => res.json());
+    return response.data as Expense;
+}
+
+export async function accountInfo(cbu){
+    const response = await fetch(`${URL_API}/bank/account_info`).then(res => res.json());
+    return response as Account;
+}
