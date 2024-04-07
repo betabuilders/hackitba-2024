@@ -45,8 +45,8 @@ class Supplier(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     organization = models.ForeignKey('Organization', related_name='suppliers', on_delete=models.CASCADE)
-    cbu = models.CharField(max_length=22, default='0000000000000000000000')
-    cuit = models.CharField(max_length=11, default='00000000000')
+    cbu = models.CharField(max_length=22, default='0000000000000000000000', unique=True)
+    cuit = models.CharField(max_length=11, default='00000000000', unique=True)
     categories = models.ManyToManyField('Category', related_name='suppliers')
     is_active = models.BooleanField(default=True)
 
@@ -85,7 +85,7 @@ class Transaction(models.Model):
     amount_in_cents = models.IntegerField(default=0) # Monto de la transacción en centavos
     balance_in_cents = models.IntegerField(default=0) # Balance de la cuenta después de la transacción
     invoice = models.FileField(upload_to='invoices/', blank=True, null=True)
-    state = models.CharField(max_length=1, choices=STATES, default='A')
+    status = models.CharField(max_length=1, choices=STATES, default='A')
 
 
     def __str__(self):

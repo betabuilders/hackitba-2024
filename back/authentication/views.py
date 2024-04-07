@@ -5,14 +5,24 @@ from django.forms.models import model_to_dict
 # User model
 from django.contrib.auth.models import User
 
+import json
+
 # Create your views here.
 
 @require_http_methods(['POST'])
 def login(request):
-    data = request.POST
-    email = data.get('email')
-    password = data.get('password')
+    # print(request.POST.dict())
+    # data = json.loads(request.body)
+    # print(data)
+
+    email = request.POST.get('email')
+    password = request.POST.get('password')
+
+    print(email, password)
+
     user = User.objects.filter(email=email).first()
+    if user is None:
+        return JsonResponse({'message': 'Invalid credentials :('}, status=401)
     member = user.member_of.all().first()
     user_dict = model_to_dict(user)
     del user_dict['username']
@@ -34,4 +44,4 @@ def login(request):
     if user and user.check_password(password):
         return JsonResponse({'message': 'Login successful', 'member':
             user_dict}, status=200)
-    return JsonResponse({'message': 'Invalid credentials'}, status=401)
+    return JsonResponse({'message': 'Invalid credentials :('}, status=401)

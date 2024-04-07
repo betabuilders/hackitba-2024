@@ -37,7 +37,6 @@ def getTotalFunds(organization):
 
 # retorna True o False según se hayan podido asignar los fondos
 # el miembro es quien asigna los fondos, la cantidad indica los fondos que se asignarán a la expensa
-# TODO: que no necesite organización, ya que la puedo obtener del member
 def assignFund(member, amount, expense):
     organization = member.organization
     balance = getOrganizationBalance(organization) 
@@ -46,8 +45,10 @@ def assignFund(member, amount, expense):
     if balance - amount < 0:
         return False
     
-    new_balance = balance - amount
-    assgined_funds = AssignedFunds(organization=organization, expense=expense, member=member, amount_in_cents=amount, balance_in_cents = new_balance)
+    new_balance = getAssignedFunds(organization) + amount
+    expense_balance = getExpenseBalance(expense) + amount
+    assgined_funds = AssignedFunds(organization=organization, expense=expense, member=member, amount_in_cents=amount, 
+                                   balance_in_cents = new_balance, expense_balance_in_cents=expense_balance)
 
     assgined_funds.save()
     return True
@@ -66,16 +67,19 @@ def generateTransaction(member, expense, amount, supplier, description='', invoi
     return True
 
 
-# gestiona la creación de pagos, devuelve True si se pudo realizar el pago, False si no
+# gestiona la creación de pagos, devuelve la response de django
 # el monto debe ser negativo para que sea un pago
 def createPayment(member, expense, amount, supplier, description='', invoice=''):
-    bankAccount = member.organization.bankAccount
+    bankAccount = member.organization.bank_account
 
-    if amount > 0 or getExpenseBalance(expense) + amount < 0:
-        return False
+    if amount > 0:
+        return JsonResponse({'message': 'Amount debe ser negativo (sale de la cuenta, no ingresa)'}, status=400) 
+    if getExpenseBalance(expense) + amount < 0:
+        return JsonResponse({'message': 'Error: Insufficient funds'}, status=400)
 
     # hace el request a la api de bancos para transferir x monto de bankAcount a supplier (cbu)
-    url = os.getenv('HACKITBA_HOST')
+    # url = os.getenv('HACKITBA_HOST')
+    url = 'http://localhost:8000/bank/transfer/'
     data = {
         'amount': amount,
         'account_id': bankAccount.account_id,
@@ -84,11 +88,11 @@ def createPayment(member, expense, amount, supplier, description='', invoice='')
     response = requests.post(url, data=data)
     if not response.status_code == 201:
         generateTransaction(member, expense, amount, supplier, description, invoice, status='R') # transacción guardada como no exitosa
-        return False
+        return JsonResponse({'message': 'Error: Payment failed but registred'}, status=400)
     
     assignFund(member, - amount, expense) # resto el dinero de la cuenta corriente de la expensa
     generateTransaction(member, expense, amount, supplier, description, invoice, status='A') # guardo la transacción ya que se realizó con éxito
-    return True
+    return JsonResponse({'message': 'Payment created successfully'}, status=201)
 
 
 # agrega fondos a la organización. Solo si sos admin, retorna True si se pudo agregar los fondos, False si no
@@ -198,7 +202,7 @@ class ExpenseView(View):
             elif organization is not None:
                 expenses = Expense.objects.filter(Q(organization=organization))
                 expenses_list = []
-                for expense in expense:
+                for expense in expenses:
                     members = []
                     for member in expense.members.all():
                         member_dict = model_to_dict(member)
@@ -214,7 +218,7 @@ class ExpenseView(View):
                     expense_dict['categories'] = categories
                     expenses_list.append(expense_dict)
                     
-                return JsonResponse({'message': 'OK', 'data': expenses}, status=200)
+                return JsonResponse({'message': 'OK', 'data': expenses_list}, status=200)
             else:
                 expenses = Expense.objects.all()
                 # expenses = list(expenses.values())
@@ -488,13 +492,19 @@ class TransactionView(View):
     def get(self, request, id=None):
         if id is None:
             organization = request.GET.get('organization')
-            if organization is not None:
+            expense = request.GET.get('expense')
+            if expense is not None:
+                transactions = Transaction.objects.filter(Q(expense=expense))
+                transactions = list(transactions.values())
+                return JsonResponse({'message': 'OK', 'data': transactions}, status=200)
+            elif organization is not None:
                 transactions = Transaction.objects.filter(Q(organization=organization))
                 transactions = list(transactions.values())
                 return JsonResponse({'message': 'OK', 'data': transactions}, status=200)
-            transactions = Transaction.objects.all()
-            transactions = list(transactions.values())
-            return JsonResponse({'message': 'OK', 'data': transactions}, status=200)
+            else:
+                transactions = Transaction.objects.all()
+                transactions = list(transactions.values())
+                return JsonResponse({'message': 'OK', 'data': transactions}, status=200)
         else:
             transaction = Transaction.objects.filter(Q(id=id))
             if len(transaction) == 0:
@@ -515,8 +525,11 @@ class TransactionView(View):
         
         if member is None:
             return JsonResponse({'message': 'Error: member is required'}, status=400)
-        if amount is None or amount == 0:
+        if amount is None:
             return JsonResponse({'message': 'Error: non zero amount is required'}, status=400)
+
+        amount = int(amount)
+        member = get_object_or_404(Member, id=member)
 
         # si el monto es positivo, lo que se está haciendo es cargar plata a la cuenta
         if amount > 0:
@@ -537,11 +550,14 @@ class TransactionView(View):
             description = ''
         if invoice is None:
             invoice = ''
-        
-        # si el monto es negativo, tengo que crear un pago TODO: ver description
-        createPayment(member, expense, amount, supplier, description, invoice)
 
-        
+        expense = get_object_or_404(Expense, id=expense)
+        supplier = get_object_or_404(Supplier, cbu=supplier)
+
+        # si el monto es negativo, tengo que crear un pago TODO: ver description
+        return createPayment(member, expense, amount, supplier, description, invoice)
+
+       
     @csrf_exempt
     def put(self, request, id=None):
         info = request.PUT.get('info')
@@ -565,10 +581,26 @@ class AssignedFundsView(View):
                 return JsonResponse({'message': 'OK', 'data': f'Show all assigned funds for organization with id: {organization}'}, status=200)
             return JsonResponse({'message': 'OK', 'data': f'Show assigned fund with id: {id}'}, status=200)
     
+    # agrega o remueve fondos de una expensa dada
     @csrf_exempt
     def post(self, request):
-        info = request.POST.get('info')
-        return JsonResponse({'message': 'OK', 'data': 'Create an assigned fund', 'info': info}, status=200)
+        member = request.POST.get('member') # created_by (qué admin asigna los fondos)
+        expense = request.POST.get('expense')
+        amount = request.POST.get('amount')
+
+        if member is None:
+            return JsonResponse({'message': 'Error: member is required'}, status=400)
+        if expense is None:
+            return JsonResponse({'message': 'Error: expense is required'}, status=400)
+        if amount is None:
+            return JsonResponse({'message': 'Error: amount is required'}, status=400)
+
+        member = get_object_or_404(Member, id=member)
+        expense = get_object_or_404(Expense, id=expense)
+
+        if assignFund(member, int(amount), expense):
+            return JsonResponse({'message': 'Assigned funds successfully'}, status=201)
+        return JsonResponse({'message': 'Error: Insufficient funds'}, status=400)
     
     @csrf_exempt
     def put(self, request, id=None):
