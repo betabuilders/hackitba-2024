@@ -12,7 +12,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { MoreHorizontal } from "lucide-react"
+import { MoreHorizontal, Plus } from "lucide-react"
 
 import { 
     ColumnDef,
@@ -23,6 +23,10 @@ import {
 
 
 import { SUPPLIERS } from "@/lib/constants"
+import { Card } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 export type Payment = {
     id: string,
@@ -145,12 +149,75 @@ export function DataTable<TData extends Payment, TValue>({
         </Table>
       </div>
     )
-  }
+}
+
+function AdditionDialog() {
+	return <Dialog>
+		<DialogTrigger asChild>
+			<Card className="mt-2 p-2 flex justify-center flex-row"><Plus/></Card>
+		</DialogTrigger>
+		<DialogContent className="sm:max-w-[425px]">
+		<DialogHeader>
+			<DialogTitle>Añadir un nuevo provedor</DialogTitle>
+			{/* <DialogDescription>
+			Make changes to your profile here. Click save when you're done.
+			</DialogDescription> */}
+		</DialogHeader>
+		<div className="grid gap-4 py-4">
+			<div className="grid grid-cols-4 items-center gap-4">
+			<Label htmlFor="name" className="text-right">
+				Nombre
+			</Label>
+			<Input
+				id="name"
+				defaultValue=""
+				className="col-span-3"
+			/>
+			</div>
+			<div className="grid grid-cols-4 items-center gap-4">
+			<Label htmlFor="categories" className="text-right">
+				Categorias
+			</Label>
+			<Input
+				id="categories"
+				defaultValue=""
+				className="col-span-3"
+			/>
+			</div>
+			<div className="grid grid-cols-4 items-center gap-4">
+			<Label htmlFor="cuit" className="text-right">
+				CUIT
+			</Label>
+			<Input
+				id="cuit"
+				defaultValue=""
+				className="col-span-3"
+			/>
+			</div>
+			<div className="grid grid-cols-4 items-center gap-4">
+			<Label htmlFor="cbu" className="text-right">
+				CBU
+			</Label>
+			<Input
+				id="cbu"
+				defaultValue=""
+				className="col-span-3"
+			/>
+			</div>
+		</div>
+		<DialogFooter>
+			<Button type="submit">Añadir</Button>
+		</DialogFooter>
+		</DialogContent>
+	</Dialog>
+}
+
 
 export default function SuppliersView() {
     return <div className="flex flex-col justify-center items-center w-full h-full p-8">
         <main className="p-2 m-4 lg:m-16 rounded">
             <DataTable columns={columns} data={SUPPLIERS} />
+            <AdditionDialog/>
         </main>
     </div>
 }

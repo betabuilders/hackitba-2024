@@ -9,11 +9,12 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
+import { cn } from "@/lib/utils";
 
-function AdditionDialog() {
+function AdditionDialog({ className } : { className: string }) {
 	return <Dialog>
 		<DialogTrigger asChild>
-			<Card className="flex justify-center items-center w-full h-full"><Plus className="size-16"></Plus></Card>
+			<Card className={cn("flex justify-center items-center w-full h-full", className)}><Plus className="size-16"></Plus></Card>
 		</DialogTrigger>
 		<DialogContent className="sm:max-w-[425px]">
 		<DialogHeader>
@@ -44,21 +45,21 @@ function AdditionDialog() {
 			/>
 			</div>
 			<div className="grid grid-cols-4 items-center gap-4">
-			<Label htmlFor="cuit" className="text-right">
-				CUIT
+			<Label htmlFor="amount" className="text-right">
+				Monto $
 			</Label>
 			<Input
-				id="cuit"
+				id="amount"
 				defaultValue=""
 				className="col-span-3"
 			/>
 			</div>
 			<div className="grid grid-cols-4 items-center gap-4">
-			<Label htmlFor="cbu" className="text-right">
-				CBU
+			<Label htmlFor="people" className="text-right">
+				Personas
 			</Label>
 			<Input
-				id="cbu"
+				id="people"
 				defaultValue=""
 				className="col-span-3"
 			/>
@@ -100,7 +101,7 @@ export default function ExpenseGrid(props: { expenses: Expense[], role: string, 
 
     return <div className="grid-cols grid auto-rows-min grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 items-start justify-start gap-4 w-full">
 		{
-			<AdditionDialog/>
+			<AdditionDialog className={ filteredExpenses.length == 0 ? "col-span-full h-36" : "" }/>
 		}
 		{
 			...(filteredExpenses.length == 0 ? [<Card className="p-4 col-span-full">
