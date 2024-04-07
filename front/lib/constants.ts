@@ -1,11 +1,38 @@
 export type Expense = {
-	id: string,
-    name: string,
-    amount: string,
+	id: number,
+    title: string,
+    balance: number,
     description: string,
     categories: (keyof typeof CATEGORIES)[],
-    people: string[],
+    members: Member[],
 }
+
+export type Member = {
+    id: number,
+    first_name: string,
+    last_name: string,
+    email: string,
+    role: string,
+    avatar: string,
+    organization: number,
+}
+
+export type Category = {
+    id: number,
+    name: string,
+    description: string,
+    organization_id: number,
+}
+
+export type Suppliers = {
+    id: number,
+    name: string,
+    organization_id: number,
+    cbu: string,
+    cuit: string
+}
+
+export const URL_API = "http://localhost:8000/api";
 
 export const CATEGORIES = {
     "DECOR": { name: "Decoracion", style: "bg-red-200 dark:bg-red-400 text-black"},

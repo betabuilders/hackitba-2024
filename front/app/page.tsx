@@ -5,12 +5,21 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 
+import { login } from "@/actions/action";
+
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
 
-function onSubmit(data) {
+async function onSubmit(data) {
     console.log(data);
     // @todo make a request to the server, get access and redirect
+    const response = await login(data);
+    if (!response) {
+        console.log("Error logging in");
+        return;
+        // @todo show an error message
+    }
+
     window.location = new URL('./expenses', window.origin).href;
 }
 
