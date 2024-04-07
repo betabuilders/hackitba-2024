@@ -25,5 +25,4 @@ urlpatterns = [
     path('assignedfunds/<int:id>/', AssignedFundsView.as_view(), name='assignedfund'),
     path('bankaccounts/', BankAccountView.as_view(), name='bankaccounts'),
     path('bankaccounts/<int:id>/', BankAccountView.as_view(), name='bankaccount'),
-    
 ]

@@ -290,7 +290,9 @@ class ExpenseView(View):
             return JsonResponse({'message': 'Error: categories are required'}, status=400)
         if amount is None:
             amount = 0
-        
+
+        member = get_object_or_404(Member, id=created_by)
+
         if member.role != 'admin':
             return JsonResponse({'message': 'Error: permission denied'}, status=403)
     
@@ -327,16 +329,16 @@ class ExpenseView(View):
         categories = request.POST.get('categories')
         status = request.POST.get('status')
         
-        if name is None:
-            return JsonResponse({'message': 'Error: name is required', 'id': id}, status=400)
-        if organization is None:
-            return JsonResponse({'message': 'Error: organization is required', 'id': id}, status=400)
-        if category is None:
-            return JsonResponse({'message': 'Error: category is required', 'id': id}, status=400)
-        if amount is None:
-            return JsonResponse({'message': 'Error: amount is required', 'id': id}, status=400)
-        if status is None:
-            return JsonResponse({'message': 'Error: status is required', 'id': id}, status=400)
+        # if name is None:
+        #     return JsonResponse({'message': 'Error: name is required', 'id': id}, status=400)
+        # if organization is None:
+        #     return JsonResponse({'message': 'Error: organization is required', 'id': id}, status=400)
+        # if category is None:
+        #     return JsonResponse({'message': 'Error: category is required', 'id': id}, status=400)
+        # if amount is None:
+        #     return JsonResponse({'message': 'Error: amount is required', 'id': id}, status=400)
+        # if status is None:
+        #     return JsonResponse({'message': 'Error: status is required', 'id': id}, status=400)
         
         expense = get_object_or_404(Expense, id=id)
         expense.title = title
@@ -524,6 +526,8 @@ class TransactionView(View):
     # puede crear un pago o agregar fondos a la organización según el signo de amount
     @csrf_exempt
     def post(self, request):
+        print(request.POST)
+        
         member = request.POST.get('member')
         expense = request.POST.get('expense')
         amount = request.POST.get('amount')
