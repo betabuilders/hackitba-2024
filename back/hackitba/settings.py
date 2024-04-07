@@ -43,10 +43,11 @@ DEFAULT_APPS = [
 
 CUSTOM_APPS = [
     'api',
+    'authentication',
+    'bank',
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + CUSTOM_APPS
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
