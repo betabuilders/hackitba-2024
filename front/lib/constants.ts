@@ -50,7 +50,7 @@ export const EXPENSES = [
       description:
         "Almuerzo para el equipo de trabajo en el cumpleaños de la empresa",
       categories: ["FOOD", "ONLINE"],
-      people: ["avatar-1", "avatar-3"]
+      people: ["avatar-3", "avatar-1"]
     },
   ] as Expense[];
 

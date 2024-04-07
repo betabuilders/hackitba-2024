@@ -59,7 +59,7 @@ export function DesktopNavBar({
 						</div>
 					})}
 					{
-						<Avatar><img src="/avatars/avatar-2.jpeg" key={'pfp'} /></Avatar>
+						<Avatar><img src="/avatars/avatar-1.jpeg" key={'pfp'} /></Avatar>
 					}
 				</div>
 			</div>
